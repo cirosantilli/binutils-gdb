@@ -4889,7 +4889,6 @@ rbreak_command (char *regexp, int from_tty)
   struct symbol_search *p;
   struct cleanup *old_chain;
   char *string = NULL;
-  int len = 0;
   const char **files = NULL;
   const char *file_name;
   int nfiles = 0;
@@ -4928,20 +4927,11 @@ rbreak_command (char *regexp, int from_tty)
 	{
 	  struct symtab *symtab = symbol_symtab (p->symbol);
 	  const char *fullname = symtab_to_fullname (symtab);
-
-	  int newlen = (strlen (fullname)
-			+ strlen (SYMBOL_LINKAGE_NAME (p->symbol))
-			+ 4);
-
-	  if (newlen > len)
-	    {
-	      string = xrealloc (string, newlen);
-	      len = newlen;
-	    }
-	  strcpy (string, fullname);
-	  strcat (string, ":'");
-	  strcat (string, SYMBOL_LINKAGE_NAME (p->symbol));
-	  strcat (string, "'");
+	  string = concat(fullname,
+			  ":'",
+			  SYMBOL_LINKAGE_NAME (p->symbol),
+			  "'",
+			  (char *)NULL);
 	  break_command (string, from_tty);
 	  print_symbol_info (FUNCTIONS_DOMAIN,
 			     p->symbol,
@@ -4950,17 +4940,10 @@ rbreak_command (char *regexp, int from_tty)
 	}
       else
 	{
-	  int newlen = (strlen (MSYMBOL_LINKAGE_NAME (p->msymbol.minsym)) + 3);
-
-	  if (newlen > len)
-	    {
-	      string = xrealloc (string, newlen);
-	      len = newlen;
-	    }
-	  strcpy (string, "'");
-	  strcat (string, MSYMBOL_LINKAGE_NAME (p->msymbol.minsym));
-	  strcat (string, "'");
-
+	  string = concat("'",
+			  MSYMBOL_LINKAGE_NAME (p->msymbol.minsym),
+			  "'",
+			  (char *)NULL);
 	  break_command (string, from_tty);
 	  printf_filtered ("<function, no debug info> %s;\n",
 			   MSYMBOL_PRINT_NAME (p->msymbol.minsym));

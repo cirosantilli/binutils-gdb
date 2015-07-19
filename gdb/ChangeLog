@@ -1,3 +1,7 @@
+4015-07-20  Ciro Santilli  <ciro.santilli@gmail.com>
+
+	* symtab.c (rbreak_command): Factor with concat.
+
 2015-07-15  Markus Metzger  <markus.t.metzger@intel.com>
 	    Pedro Alves <palves@redhat.com>
 
