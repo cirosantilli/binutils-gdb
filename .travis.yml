@@ -3,6 +3,7 @@ language: cpp
 install: |
   sudo apt-get update
   sudo apt-get build-dep gdb
+  sudo apt-get install systemtap-sdt-dev
   cd "$TRAVIS_BUILD_DIR"
   mkdir _build
   cd _build
@@ -19,4 +20,15 @@ script: |
   cd "$TRAVIS_BUILD_DIR/_build/gdb"
   # Way more tests fail when running in parallel...
   #sudo make -j"$(nproc)" check
+  # We cannot silence this to /dev/null, or else it would run for 10 minutes
+  # without stdout, and Travis would kill it.
   sudo make check
+  status=$?
+  # This would blow up the log size.
+  # The only way to see it would be to configure artifact upload.
+  #cat testsuite/gdb.log
+  echo '### START gdb.sum ###'
+  grep -v '^PASS' testsuite/gdb.sum
+  echo '### END gdb.sum ###'
+  # In a subshell, otherwise the Travis build errors instead of fail.
+  (exit $status)
