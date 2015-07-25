@@ -1,0 +1,22 @@
+language: cpp
+
+install: |
+  sudo apt-get update
+  sudo apt-get build-dep gdb
+  cd "$TRAVIS_BUILD_DIR"
+  mkdir _build
+  cd _build
+  ../configure --with-sysroot=/
+  cd gdb/
+  make -j"$(nproc)"
+  # ptrace without sudo
+  # File does not exist?
+  #echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+  # bigcore.exp: permission denied.
+  #echo | sudo tee /proc/sys/kernel/core_pattern
+
+script: |
+  cd "$TRAVIS_BUILD_DIR/_build/gdb"
+  # Way more tests fail when running in parallel...
+  #sudo make -j"$(nproc)" check
+  sudo make check
