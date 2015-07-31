@@ -595,15 +595,32 @@ think you will be ready to submit the patches.
 GDB Testsuite
 =============
 
-   Included with the GDB distribution is a DejaGNU based testsuite
-that can either be used to test your newly built GDB, or for
-regression testing a GDB with local modifications.
+Requirements:
 
-   Running the testsuite requires the prior installation of DejaGNU,
-which is generally available via ftp.  The directory
-ftp://sources.redhat.com/pub/dejagnu/ will contain a recent snapshot.
-Once DejaGNU is installed, you can run the tests in one of the
-following ways:
+*   DejaGNU
+
+*   Ability to attach to processes with the same UID.
+
+    In Linux, you need either to ensure that ptrace is allowed with:
+
+        echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+
+    or sudo, which is a bad idea.
+
+*   Ability to generate big sparse core files.
+
+    In Linux, this is done by default, but it may be broken if your
+    distribution sets:
+
+        /proc/sys/kernel/core_pattern
+
+    to something starting with `|` to use a custom handler program.
+
+    You can fix that with:
+
+        echo | sudo tee /proc/sys/kernel/core_pattern
+
+Usage:
 
   (1)	cd gdb-VERSION
 	make check-gdb
