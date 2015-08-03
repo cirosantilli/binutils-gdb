@@ -16,7 +16,6 @@
 # This file was written by Elena Zannoni (ezannoni@cygnus.com)
 
 # this file tests command line calls with functions returning structures
-# corresponding source file: call_return_struct.c
 
 
 
