@@ -27,7 +27,15 @@ extern const struct target_desc *tdesc_sh;
 #include <sys/reg.h>
 #endif
 
+#if !defined(__GLIBC__)
+# define pt_regs uapi_pt_regs
+# define pt_dspregs uapi_pt_dspregs
+#endif
 #include <asm/ptrace.h>
+#if !defined(__GLIBC__)
+# undef pt_regs
+# undef pt_dspregs
+#endif
 
 #define sh_num_regs 41
 
