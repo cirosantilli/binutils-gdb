@@ -17,15 +17,16 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 #include "server.h"
+
+#ifdef HAVE_SYS_REG_H
+#include <sys/reg.h>
+#endif
+
 #include "linux-low.h"
 
 /* Defined in auto-generated file reg-m68k.c.  */
 void init_registers_m68k (void);
 extern const struct target_desc *tdesc_m68k;
-
-#ifdef HAVE_SYS_REG_H
-#include <sys/reg.h>
-#endif
 
 #define m68k_num_regs 29
 #define m68k_num_gregs 18
